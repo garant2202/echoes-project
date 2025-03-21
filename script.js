@@ -135,3 +135,83 @@ document.addEventListener('DOMContentLoaded', function() {
     // Налаштування зони завантаження файлів
     const uploaderZone = document.getElementById('uploader-zone');
     const fileInput =
+// Обробка подій після завантаження сторінки
+document.addEventListener('DOMContentLoaded', function() {
+    // Кнопки тарифних планів
+    const planButtons = document.querySelectorAll('.plan .btn');
+    
+    // Додаємо обробник подій до кожної кнопки
+    planButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Визначаємо, яка кнопка була натиснута
+            const planName = this.closest('.plan').querySelector('h3').textContent;
+            
+            // Показуємо повідомлення в залежності від плану
+            if (planName === 'Безкоштовно') {
+                showMessage('Ви обрали безкоштовний план. Почніть створювати ваші перші відлуння!');
+            } else if (planName === 'Echoes Plus') {
+                showMessage('Дякуємо за вибір преміум-плану Echoes Plus! На даний момент ця функція знаходиться в розробці.');
+            }
+        });
+    });
+    
+    // Кнопка "Створити відлуння"
+    const createButton = document.querySelector('.hero .btn');
+    createButton.addEventListener('click', function() {
+        showMessage('Функціонал створення відлунь знаходиться в розробці. Скоро ви зможете завантажувати свої спогади!');
+    });
+    
+    // Анімація для елементів при прокрутці
+    function animateOnScroll() {
+        const elements = document.querySelectorAll('.feature, .plan');
+        
+        elements.forEach(element => {
+            const position = element.getBoundingClientRect();
+            
+            // Якщо елемент у полі зору
+            if (position.top < window.innerHeight && position.bottom >= 0) {
+                element.classList.add('visible');
+            }
+        });
+    }
+    
+    // Ініціалізуємо анімацію при прокрутці
+    window.addEventListener('scroll', animateOnScroll);
+    animateOnScroll(); // Запускаємо один раз при завантаженні
+});
+
+// Функція для показу повідомлень
+function showMessage(text) {
+    // Перевіряємо, чи існує вже модальне вікно
+    let messageModal = document.getElementById('message-modal');
+    
+    // Якщо ні, створюємо його
+    if (!messageModal) {
+        messageModal = document.createElement('div');
+        messageModal.id = 'message-modal';
+        messageModal.innerHTML = `
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <p id="modal-message"></p>
+            </div>
+        `;
+        document.body.appendChild(messageModal);
+        
+        // Додаємо обробник для закриття модального вікна
+        const closeBtn = messageModal.querySelector('.close-modal');
+        closeBtn.addEventListener('click', function() {
+            messageModal.style.display = 'none';
+        });
+        
+        // Закриття модального вікна при клацанні поза ним
+        window.addEventListener('click', function(event) {
+            if (event.target === messageModal) {
+                messageModal.style.display = 'none';
+            }
+        });
+    }
+    
+    // Оновлюємо повідомлення і показуємо модальне вікно
+    document.getElementById('modal-message').textContent = text;
+    messageModal.style.display = 'flex';
+}
